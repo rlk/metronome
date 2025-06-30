@@ -1,0 +1,14 @@
+{
+  "name": "Metronome",
+  "short_name": "Metronome",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "description": "A simple metronome app",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}

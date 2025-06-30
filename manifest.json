@@ -1,7 +1,7 @@
 {
   "name": "Metronome",
   "short_name": "Metronome",
-  "start_url": "/index.html",
+  "start_url": "/metronome/index.html",
   "display": "standalone",
   "description": "A simple metronome app",
   "icons": [

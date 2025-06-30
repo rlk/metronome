@@ -36,18 +36,15 @@ button {
   justify-content: center;
   align-items: center;
   padding: 0rex;
-  border: 0rex;
-  border-radius: 2.0rex;
-  margin: 0.5rex;
+  border: 0.3rex;
+  border-radius: 2.5rex;
+  border-color: hsl(0, 0%, 0%);
+  border-style: solid;
   touch-action: manipulation;
 }
 
-button:hover {
-  background-color: hsl(34, 87%, 69%) !important;
-}
-
 button:active {
-  background-color: hsl(34, 87%, 79%) !important;
+  background-color: hsl(34, 87%, 69%) !important;
 }
 
 .column {
@@ -73,7 +70,6 @@ button:active {
   flex: 1;
   justify-content: center;
   align-items: center;
-  margin: 0.5rex;
   font-size: 500%;
   font-variant-numeric: tabular-nums;
 }
@@ -144,17 +140,13 @@ button:active {
 .grid.left {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-  margin-right: 0.2rex;
 }
 
 .grid.center {
   border-radius: 0;
-  margin-right: 0.2rex;
-  margin-left: 0.2rex;
 }
 
 .grid.right {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-  margin-left: 0.2rex;
 }

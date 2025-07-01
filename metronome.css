@@ -118,6 +118,10 @@ button:active {
   background-color: hsl(34, 87%, 59%);
 }
 
+.play.locked {
+  background-color: hsl(112, 87%, 29%);
+}
+
 .full {
   font-size: 200%;
 }

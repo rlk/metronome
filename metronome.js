@@ -48,6 +48,7 @@ class Metronome {
     this.read = false;
     this.full = false;
     this.interval = 0;
+    this.sentinel = null;
 
     this.audioContext = new AudioContext();
 
@@ -126,11 +127,13 @@ class Metronome {
       this.audioContext.suspend().then(() => {
         clearInterval(this.interval);
         this.interval = 0;
+        this.unlockScreen();
       });
     } else {
       this.audioContext.resume().then(() => {
         this.updateInterval();
         this.playTick();
+        this.lockScreen();
       });
     }
   }
@@ -209,6 +212,22 @@ class Metronome {
       this.leaveRead(this.bpm - 10);
     }
     this.storeState();
+  }
+
+  lockScreen() {
+    navigator.wakeLock.request("screen").then(lock => {
+      this.sentinel = lock;
+      document.querySelector('.play')?.classList.add('locked');
+
+      this.sentinel.onrelease = function() {
+        this.sentinel = null;
+        document.querySelector('.play')?.classList.remove('locked');
+      };
+    });
+  }
+
+  unlockScreen() {
+    this.sentinel?.release();
   }
 
   loadState() {

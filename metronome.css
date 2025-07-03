@@ -4,7 +4,7 @@ body {
   display: flex;
   height: 95vh;
   width: 100vw;
-  background-color: hsl(0, 0%, 0%);
+  background: hsl(0, 0%, 0%);
   color: hsl(0, 0%, 100%);
 }
 
@@ -36,15 +36,11 @@ button {
   justify-content: center;
   align-items: center;
   padding: 0ex;
-  border: 0.3ex;
-  border-radius: 2.0ex;
-  border-color: hsl(0, 0%, 0%);
+  margin: 0.3ex;
   border-style: solid;
+  border-width: 0.5ex;
+  border-radius: 2.0ex;
   touch-action: manipulation;
-}
-
-button:active {
-  background-color: hsl(34, 87%, 69%) !important;
 }
 
 .column {
@@ -75,27 +71,11 @@ button:active {
 }
 
 .digit.selected {
-  color: hsl(32, 87%, 59%);
+  color: hsl(35, 80%, 60%);
 }
 
 .digit.unselected {
   color: hsl(0, 0%, 100%);
-}
-
-.grid.idle.unselected {
-  background-color: hsl(34, 2%, 39%);
-}
-
-.grid.idle.selected {
-  background-color: hsl(34, 87%, 39%);
-}
-
-.grid.current.unselected {
-  background-color: hsl(34, 2%, 59%);
-}
-
-.grid.current.selected {
-  background-color: hsl(34, 87%, 59%);
 }
 
 .bar.selected {
@@ -106,24 +86,67 @@ button:active {
   display: none;
 }
 
+button:active {
+  border-color: hsl(35, 80%, 80%) !important;
+}
+
 .num {
-  background-color: hsl(34, 2%, 17%);
+  background-color: hsl(35, 0%, 20%);
+  border-color: hsl(35, 0%, 20%);
 }
 
 .fun {
-  background-color: hsl(34, 87%, 59%);
+  background-color: hsl(35, 80%, 60%);
+  border-color: hsl(35, 80%, 60%);
 }
 
 .sig {
-  background-color: hsl(34, 87%, 59%);
+  background-color: hsl(35, 80%, 60%);
+  border-color: hsl(35, 80%, 60%);
 }
 
 .play.locked {
-  background-color: hsl(112, 87%, 29%);
+  background-color: hsl(112, 80%, 30%);
+  border-color: hsl(112, 80%, 30%);
 }
 
-.full {
-  font-size: 200%;
+.tick.off {
+  background-color: hsl(35, 0%, 20%);
+  border-color: hsl(35, 0%, 20%);
+}
+
+.tick.low {
+  background-color: hsl(35, 80%, 30%);
+  border-color: hsl(35, 80%, 30%);
+}
+
+.tick.high {
+  background-color: hsl(35, 80%, 60%);
+  border-color: hsl(35, 80%, 60%);
+}
+
+.tick.current.off {
+  border-color: hsl(35, 0%, 40%);
+}
+
+.tick.current.low {
+  border-color: hsl(35, 80%, 60%);
+}
+
+.tick.current.high {
+  border-color: hsl(35, 80%, 80%);
+}
+
+.tick.left {
+  border-radius: 2ex 0ex 0ex 2ex;
+}
+
+.tick.center {
+  border-radius: 0ex;
+}
+
+.tick.right {
+  border-radius: 0ex 2ex 2ex 0ex;
 }
 
 .frac {
@@ -139,18 +162,4 @@ button:active {
 .bot {
   display: block;
   border-top: 2px solid white;
-}
-
-.grid.left {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.grid.center {
-  border-radius: 0;
-}
-
-.grid.right {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
 }

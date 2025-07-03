@@ -28,8 +28,8 @@ class Metronome {
     this.digitElement[1] = document.querySelector('.digit1');
     this.digitElement[0] = document.querySelector('.digit0');
 
-    document.querySelectorAll('.grid').forEach((element) => {
-      element.addEventListener('click', () => this.clickGrid(element));
+    document.querySelectorAll('.tick').forEach((element) => {
+      element.addEventListener('click', () => this.clickTick(element));
     })
 
     document.querySelectorAll('.sig').forEach((element) => {
@@ -55,7 +55,11 @@ class Metronome {
     fetch('wood-block-low.wav')
       .then(response => response.arrayBuffer())
       .then(buffer => this.audioContext.decodeAudioData(buffer))
-      .then(buffer => { this.audioBuffer = buffer });
+      .then(buffer => { this.audioBufferLow = buffer });
+    fetch('wood-block-high.wav')
+      .then(response => response.arrayBuffer())
+      .then(buffer => this.audioContext.decodeAudioData(buffer))
+      .then(buffer => { this.audioBufferHigh = buffer });
 
     this.loadState();
   }
@@ -67,13 +71,13 @@ class Metronome {
       clearInterval(this.interval);
     }
     this.interval = setInterval(() => {
-      this.stepGrid();
+      this.stepTick();
       this.playTick();
     }, timeout);
   }
 
-  stepGrid() {
-    var lastElement = document.querySelector('.bar.selected > .grid.current');
+  stepTick() {
+    var lastElement = document.querySelector('.bar.selected > .tick.current');
     var nextElement = lastElement.nextElementSibling ?? lastElement.parentNode.firstElementChild;
 
     lastElement.classList.toggle('current');
@@ -83,28 +87,44 @@ class Metronome {
   }
 
   playTick() {
-    if (document.querySelector('.bar.selected > .grid.current').classList.contains('selected')) {
+    var classList = document.querySelector('.bar.selected > .tick.current').classList;
+    var buffer = null;
+
+    if (classList.contains('low')) {
+      buffer = this.audioBufferLow;
+    }
+    if (classList.contains('high')) {
+      buffer = this.audioBufferHigh;
+    }
+    if (buffer) {
       var source = this.audioContext.createBufferSource()
-      source.buffer = this.audioBuffer;
+      source.buffer = buffer;
       source.connect(this.audioContext.destination);
       source.start();
     }
   }
 
-  clickGrid(element) {
-    element.classList.toggle('selected');
-    element.classList.toggle('unselected');
+  clickTick(element) {
+    if (element.classList.contains('off')) {
+      element.classList.replace('off', 'low')
+    } else if (element.classList.contains('low')) {
+      element.classList.replace('low', 'high')
+    } else if (element.classList.contains('high')) {
+      element.classList.replace('high', 'off')
+    }
     this.storeState();
   }
 
   clickSig(element) {
-    document.querySelector('.bar.selected > .grid.current').classList.replace('current', 'idle');
-    document.querySelector('.bar.selected > .grid.idle').classList.replace('idle', 'current');
-
     document.querySelectorAll('.bar').forEach((bar) => {
-      this.chooseClass(bar, bar.getAttribute('name') === element.getAttribute('name'), 'selected', 'unselected');
+      if (bar.getAttribute('name') === element.getAttribute('name')) {
+        bar.classList.remove('unselected');
+        bar.classList.add('selected');
+      } else {
+        bar.classList.add('unselected');
+        bar.classList.remove('selected');
+      }
     });
-
     if (this.interval) {
       this.updateInterval();
       this.playTick();
@@ -219,7 +239,7 @@ class Metronome {
       this.sentinel = lock;
       document.querySelector('.play')?.classList.add('locked');
 
-      this.sentinel.onrelease = function() {
+      this.sentinel.onrelease = function () {
         this.sentinel = null;
         document.querySelector('.play')?.classList.remove('locked');
       };
@@ -238,52 +258,74 @@ class Metronome {
     document.cookie = `METRO=${this.stringFromState()}`
   }
 
-  applyState(string, element, apply) {
-    const key = element.getAttribute('id');
-    if (key) {
-      const match = string.match(new RegExp(`${key}(\\d+)`));
-      if (match?.length > 0) {
-        apply(match.pop());
+  stateFromString(string) {
+    function apply(element, fun) {
+      const key = element.getAttribute('id');
+      if (key) {
+        const match = string.match(new RegExp(`${key}(\\d+)`));
+        if (match?.length > 0) {
+          fun(match.pop());
+        }
       }
     }
-  }
 
-  stateFromString(string) {
     document.querySelectorAll('.digit').forEach((element) => {
-      this.applyState(string, element, value => element.textContent = value);
+      apply(element, value => element.textContent = value);
     });
-    document.querySelectorAll('.option').forEach((element) => {
-      this.applyState(string, element, value => {
-        this.chooseClass(element, value & '1', 'selected', 'unselected');
-        this.chooseClass(element, value & '2', 'current', 'idle');
+    document.querySelectorAll('.tick').forEach((element) => {
+      apply(element, value => {
+        if (value == 0) {
+          element.classList.add('off');
+          element.classList.remove('low');
+          element.classList.remove('high');
+        } else if (value == 1) {
+          element.classList.remove('off');
+          element.classList.add('low');
+          element.classList.remove('high');
+        } else if (value == 2) {
+          element.classList.remove('off');
+          element.classList.remove('low');
+          element.classList.add('high');
+        }
+      });
+    });
+    document.querySelectorAll('.bar').forEach((element) => {
+      apply(element, value => {
+        if (value == 0) {
+          element.classList.add('unselected');
+          element.classList.remove('selected');
+        } else {
+          element.classList.remove('unselected');
+          element.classList.add('selected');
+        }
       });
     });
     this.clickEnter();
   }
 
   stringFromState() {
+    function digitValue(element) {
+      return element.textContent || '0';
+    }
+    function tickValue(element) {
+      return element.classList.contains('high') ? '2' :
+        (element.classList.contains('low') ? '1' : '0');
+    }
+    function barValue(element) {
+      return element.classList.contains('selected') ? '1' : '0';
+    }
+
     var string = '';
     document.querySelectorAll('.digit').forEach((element) => {
-      const value = element.textContent || '0'
-      string += `${element.getAttribute('id')}${value}`
+      string += `${element.getAttribute('id')}${digitValue(element)}`
     });
-    document.querySelectorAll('.option').forEach((element) => {
-      const value = (
-        (element.classList.contains('selected') ? '1' : '0') |
-        (element.classList.contains('current') ? '2' : '0'));
-      string += `${element.getAttribute('id')}${value}`
+    document.querySelectorAll('.tick').forEach((element) => {
+      string += `${element.getAttribute('id')}${tickValue(element)}`
+    });
+    document.querySelectorAll('.bar').forEach((element) => {
+      string += `${element.getAttribute('id')}${barValue(element)}`
     });
     return string;
-  }
-
-  chooseClass(element, condition, a, b) {
-    if (condition) {
-      element.classList.add(a);
-      element.classList.remove(b);
-    } else {
-      element.classList.add(b);
-      element.classList.remove(a);
-    }
   }
 }
 

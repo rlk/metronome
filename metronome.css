@@ -43,6 +43,10 @@ button {
   touch-action: manipulation;
 }
 
+button:active {
+  border-color: hsl(35, 80%, 80%) !important;
+}
+
 .column {
   display: flex;
   flex-direction: column;
@@ -84,10 +88,6 @@ button {
 
 .bar.unselected {
   display: none;
-}
-
-button:active {
-  border-color: hsl(35, 80%, 80%) !important;
 }
 
 .num {

@@ -121,13 +121,19 @@ class Metronome {
   }
 
   clickSig(element) {
+    document.querySelectorAll('.bar > .tick').forEach((tick) => {
+      if (tick.parentElement.firstElementChild === tick) {
+        tick.classList.replace('idle', 'current');
+      } else {
+        tick.classList.replace('current', 'idle');
+      }
+    });
+
     document.querySelectorAll('.bar').forEach((bar) => {
       if (bar.getAttribute('name') === element.getAttribute('name')) {
-        bar.classList.remove('unselected');
-        bar.classList.add('selected');
+        bar.classList.replace('unselected', 'selected');
       } else {
-        bar.classList.add('unselected');
-        bar.classList.remove('selected');
+        bar.classList.replace('selected', 'unselected');
       }
     });
     if (this.interval) {

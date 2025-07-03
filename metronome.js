@@ -44,11 +44,16 @@ class Metronome {
       element.addEventListener('click', () => this.clickFun(element));
     })
 
+    document.querySelectorAll('.tap').forEach((element) => {
+      element.addEventListener('click', (event) => this.clickTap(event));
+    })
+
     this.bpm = 120;
     this.read = false;
-    this.full = false;
     this.interval = 0;
     this.sentinel = null;
+    this.timeStamp = 0;
+    this.timeQueue = [];
 
     this.audioContext = new AudioContext();
 
@@ -132,13 +137,22 @@ class Metronome {
     this.storeState();
   }
 
-  clickFull() {
-    if (this.full) {
-      document.exitFullscreen();
-      this.full = false;
+  clickTap(event) {
+    var delta = event.timeStamp - this.timeStamp;
+    this.timeStamp = event.timeStamp;
+
+    if (delta > 2000) {
+      this.timeQueue = [];
     } else {
-      this.body.requestFullscreen();
-      this.full = true;
+      this.timeQueue.push(delta);
+    }
+    if (this.timeQueue.length > 6) {
+      this.timeQueue.shift();
+    }
+    if (this.timeQueue.length > 0) {
+      var average =
+        this.timeQueue.reduce((a, x) => a + x, 0) / this.timeQueue.length;
+      this.setBpm(Math.round(60000 / average));
     }
   }
 
@@ -158,8 +172,7 @@ class Metronome {
     }
   }
 
-  enterRead() {
-    this.read = true
+  clearDigits() {
     this.digitElement[2].classList.replace('unselected', 'selected');
     this.digitElement[1].classList.replace('unselected', 'selected');
     this.digitElement[0].classList.replace('unselected', 'selected');
@@ -169,7 +182,7 @@ class Metronome {
     this.digitElement[0].textContent = "";
   }
 
-  leaveRead(bpm) {
+  setBpm(bpm) {
     bpm = Math.max(1, bpm);
     if (this.bpm != bpm) {
       this.bpm = bpm;
@@ -178,11 +191,11 @@ class Metronome {
       }
     }
 
-    var value = this.bpm.toString();
-    this.read = false;
     this.digitElement[2].classList.replace('selected', 'unselected');
     this.digitElement[1].classList.replace('selected', 'unselected');
     this.digitElement[0].classList.replace('selected', 'unselected');
+
+    var value = this.bpm.toString();
 
     this.digitElement[2].textContent = value.charAt(value.length - 3);
     this.digitElement[1].textContent = value.charAt(value.length - 2);
@@ -198,12 +211,14 @@ class Metronome {
     digit1 = isNaN(digit1) ? 0 : digit1;
     digit0 = isNaN(digit0) ? 0 : digit0;
 
-    this.leaveRead(digit2 * 100 + digit1 * 10 + digit0);
+    this.setBpm(digit2 * 100 + digit1 * 10 + digit0);
+    this.read = false;
   }
 
   clickNum(element) {
     if (this.read == false) {
-      this.enterRead();
+      this.clearDigits();
+      this.read = true;
     }
     if (this.read) {
       this.digitElement[2].textContent = this.digitElement[1].textContent;
@@ -213,23 +228,21 @@ class Metronome {
   }
 
   clickFun(element) {
-    var name = element.getAttribute('name')
+    var name = element.getAttribute('name');
     if (name == 'play') {
       this.clickPlay();
-    } else if (name == 'full') {
-      this.clickFull();
     } else if (name == 'P') {
       this.clickEnter();
     } else if (name == 'S') {
-      this.leaveRead(this.bpm);
+      this.setBpm(this.bpm);
     } else if (name == 'A') {
-      this.leaveRead(this.bpm + 10);
+      this.setBpm(this.bpm + 10);
     } else if (name == 'B') {
-      this.leaveRead(this.bpm + 1);
+      this.setBpm(this.bpm + 1);
     } else if (name == 'C') {
-      this.leaveRead(this.bpm - 1);
+      this.setBpm(this.bpm - 1);
     } else if (name == 'D') {
-      this.leaveRead(this.bpm - 10);
+      this.setBpm(this.bpm - 10);
     }
     this.storeState();
   }

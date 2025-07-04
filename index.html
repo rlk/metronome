@@ -10,138 +10,150 @@
 </head>
 
 <body>
-  <div class="column">
-    <div class="display">
-      <div class="column">
-        <button class="fun play" name="play">
-          <div class="frac">
-            <div class="top">Start</div>
-            <div class="bot">Stop</div>
+  <main>
+    <div class="column">
+      <div class="display">
+        <div class="column">
+          <button class="fun play" name="play">
+            <div class="stack">
+              <div class="top">Start</div>
+              <div class="bot">Stop</div>
+            </div>
+          </button>
+          <button class="fun tap" name="tap">Tap</button>
+        </div>
+        <div class="column">
+          <div id="n2" class="digit unselected digit2">1</div>
+        </div>
+        <div class="column">
+          <div id="n1" class="digit unselected digit1">2</div>
+        </div>
+        <div class="column">
+          <div id="n0" class="digit unselected digit0">0</div>
+        </div>
+      </div>
+      <div id="a_" class="bar row unselected" name="3/4" divisions="2">
+        <button id="aa" class="tick left high current"></button>
+        <button id="ab" class="tick right off idle"></button>
+        <button id="ac" class="tick left low idle"></button>
+        <button id="ad" class="tick right off idle"></button>
+        <button id="ae" class="tick left low idle"></button>
+        <button id="af" class="tick right off idle"></button>
+      </div>
+      <div id="b_" class="bar row selected" name="4/4" divisions="2">
+        <button id="ba" class="tick left high current"></button>
+        <button id="bb" class="tick right off idle"></button>
+        <button id="bc" class="tick left low idle"></button>
+        <button id="bd" class="tick right off idle"></button>
+        <button id="be" class="tick left low idle"></button>
+        <button id="bf" class="tick right off idle"></button>
+        <button id="bg" class="tick left low idle"></button>
+        <button id="bh" class="tick right off idle"></button>
+      </div>
+      <div id="c_" class="bar row unselected" name="5/4" divisions="2">
+        <button id="ca" class="tick left high current"></button>
+        <button id="cb" class="tick right off idle"></button>
+        <button id="cc" class="tick left low idle"></button>
+        <button id="cd" class="tick right off idle"></button>
+        <button id="ce" class="tick left low idle"></button>
+        <button id="cf" class="tick right off idle"></button>
+        <button id="cg" class="tick left low idle"></button>
+        <button id="ch" class="tick right off idle"></button>
+        <button id="ci" class="tick left low idle"></button>
+        <button id="cj" class="tick right off idle"></button>
+      </div>
+      <div id="d_" class="bar row unselected" name="9/8" divisions="3">
+        <button id="da" class="tick left high current"></button>
+        <button id="db" class="tick center off idle"></button>
+        <button id="dc" class="tick right off idle"></button>
+        <button id="dd" class="tick left low idle"></button>
+        <button id="de" class="tick center off idle"></button>
+        <button id="df" class="tick right off idle"></button>
+        <button id="dg" class="tick left low idle"></button>
+        <button id="dh" class="tick center off idle"></button>
+        <button id="di" class="tick right off idle"></button>
+      </div>
+      <div id="e_" class="bar row unselected" name="12/8" divisions="3">
+        <button id="ea" class="tick left high current"></button>
+        <button id="eb" class="tick center off idle"></button>
+        <button id="ec" class="tick right off idle"></button>
+        <button id="ed" class="tick left low idle"></button>
+        <button id="ee" class="tick center off idle"></button>
+        <button id="ef" class="tick right off idle"></button>
+        <button id="eg" class="tick left low idle"></button>
+        <button id="eh" class="tick center off idle"></button>
+        <button id="ei" class="tick right off idle"></button>
+        <button id="ej" class="tick left low idle"></button>
+        <button id="ek" class="tick center off idle"></button>
+        <button id="el" class="tick right off idle"></button>
+      </div>
+      <div class="row">
+        <button class="sig" name="3/4">
+          <div class="stack">
+            <div class="top">3</div>
+            <div class="bot">4</div>
           </div>
         </button>
-        <button class="fun tap" name="tap">Tap</button>
-      </div>
-      <div class="column">
-        <div id="n2" class="digit unselected digit2">1</div>
-      </div>
-      <div class="column">
-        <div id="n1" class="digit unselected digit1">2</div>
-      </div>
-      <div class="column">
-        <div id="n0" class="digit unselected digit0">0</div>
-      </div>
-    </div>
-    <div id="a_" class="bar row unselected" name="3/4" divisions="2">
-      <button id="aa" class="tick left high current"></button>
-      <button id="ab" class="tick right off idle"></button>
-      <button id="ac" class="tick left low idle"></button>
-      <button id="ad" class="tick right off idle"></button>
-      <button id="ae" class="tick left low idle"></button>
-      <button id="af" class="tick right off idle"></button>
-    </div>
-    <div id="b_" class="bar row selected" name="4/4" divisions="2">
-      <button id="ba" class="tick left high current"></button>
-      <button id="bb" class="tick right off idle"></button>
-      <button id="bc" class="tick left low idle"></button>
-      <button id="bd" class="tick right off idle"></button>
-      <button id="be" class="tick left low idle"></button>
-      <button id="bf" class="tick right off idle"></button>
-      <button id="bg" class="tick left low idle"></button>
-      <button id="bh" class="tick right off idle"></button>
-    </div>
-    <div id="c_" class="bar row unselected" name="5/4" divisions="2">
-      <button id="ca" class="tick left high current"></button>
-      <button id="cb" class="tick right off idle"></button>
-      <button id="cc" class="tick left low idle"></button>
-      <button id="cd" class="tick right off idle"></button>
-      <button id="ce" class="tick left low idle"></button>
-      <button id="cf" class="tick right off idle"></button>
-      <button id="cg" class="tick left low idle"></button>
-      <button id="ch" class="tick right off idle"></button>
-      <button id="ci" class="tick left low idle"></button>
-      <button id="cj" class="tick right off idle"></button>
-    </div>
-    <div id="d_" class="bar row unselected" name="9/8" divisions="3">
-      <button id="da" class="tick left high current"></button>
-      <button id="db" class="tick center off idle"></button>
-      <button id="dc" class="tick right off idle"></button>
-      <button id="dd" class="tick left low idle"></button>
-      <button id="de" class="tick center off idle"></button>
-      <button id="df" class="tick right off idle"></button>
-      <button id="dg" class="tick left low idle"></button>
-      <button id="dh" class="tick center off idle"></button>
-      <button id="di" class="tick right off idle"></button>
-    </div>
-    <div id="e_" class="bar row unselected" name="12/8" divisions="3">
-      <button id="ea" class="tick left high current"></button>
-      <button id="eb" class="tick center off idle"></button>
-      <button id="ec" class="tick right off idle"></button>
-      <button id="ed" class="tick left low idle"></button>
-      <button id="ee" class="tick center off idle"></button>
-      <button id="ef" class="tick right off idle"></button>
-      <button id="eg" class="tick left low idle"></button>
-      <button id="eh" class="tick center off idle"></button>
-      <button id="ei" class="tick right off idle"></button>
-      <button id="ej" class="tick left low idle"></button>
-      <button id="ek" class="tick center off idle"></button>
-      <button id="el" class="tick right off idle"></button>
-    </div>
-    <div class="row">
-      <button class="sig" name="3/4">
-        <div class="frac">
-          <div class="top">3</div>
-          <div class="bot">4</div>
-      </button>
-      <button class="sig" name="4/4">
-        <div class="frac">
-          <div class="top">4</div>
-          <div class="bot">4</div>
-      </button>
-      <button class="sig" name="5/4">
-        <div class="frac">
-          <div class="top">5</div>
-          <div class="bot">4</div>
-      </button>
-      <button class="sig" name="9/8">
-        <div class="frac">
-          <div class="top">9</div>
-          <div class="bot">8</div>
-      </button>
-      <button class="sig" name="12/8">
-        <div class="frac">
-          <div class="top">12</div>
-          <div class="bot">8</div>
-      </button>
-    </div>
-  </div>
-  <div class="column">
-    <div class="row">
-      <div class="column">
-        <button class="num" name="1">1</button>
-        <button class="num" name="4">4</button>
-        <button class="num" name="7">7</button>
-        <button class="fun" name="S">Cancel</button>
-      </div>
-      <div class="column">
-        <button class="num" name="2">2</button>
-        <button class="num" name="5">5</button>
-        <button class="num" name="8">8</button>
-        <button class="num" name="0">0</button>
-      </div>
-      <div class="column">
-        <button class="num" name="3">3</button>
-        <button class="num" name="6">6</button>
-        <button class="num" name="9">9</button>
-        <button class="fun" name="P">Enter</button>
-      </div>
-      <div class="column">
-        <button class="fun" name="A">+10</button>
-        <button class="fun" name="B">+1</button>
-        <button class="fun" name="C">&minus;1</button>
-        <button class="fun" name="D">&minus;10</button>
+        <button class="sig" name="4/4">
+          <div class="stack">
+            <div class="top">4</div>
+            <div class="bot">4</div>
+          </div>
+        </button>
+        <button class="sig" name="5/4">
+          <div class="stack">
+            <div class="top">5</div>
+            <div class="bot">4</div>
+          </div>
+        </button>
+        <button class="sig" name="9/8">
+          <div class="stack">
+            <div class="top">9</div>
+            <div class="bot">8</div>
+          </div>
+        </button>
+        <button class="sig" name="12/8">
+          <div class="stack">
+            <div class="top">12</div>
+            <div class="bot">8</div>
+          </div>
+        </button>
       </div>
     </div>
-  </div>
+    <div class="column">
+      <div class="row">
+        <div class="column">
+          <button class="num" name="1">1</button>
+          <button class="num" name="4">4</button>
+          <button class="num" name="7">7</button>
+          <button class="fun" name="S">Cancel</button>
+        </div>
+        <div class="column">
+          <button class="num" name="2">2</button>
+          <button class="num" name="5">5</button>
+          <button class="num" name="8">8</button>
+          <button class="num" name="0">0</button>
+        </div>
+        <div class="column">
+          <button class="num" name="3">3</button>
+          <button class="num" name="6">6</button>
+          <button class="num" name="9">9</button>
+          <button class="fun" name="P">Enter</button>
+        </div>
+        <div class="column">
+          <button class="fun" name="A">+10</button>
+          <button class="fun" name="B">+1</button>
+          <button class="fun" name="C">&minus;1</button>
+          <button class="fun" name="D">&minus;10</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <address>
+      <a href="https://github.com/rlk/metronome">github.com/rlk/metronome</a>
+    </address>
+  </footer>
   <script src="metronome.js" type="text/javascript"></script>
 </body>
 

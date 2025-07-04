@@ -1,12 +1,30 @@
 body {
-  font-family: sans-serif;
-  margin: 0;
   display: flex;
-  height: 95vh;
+  flex-direction: column;
+  margin: 0;
+  height: 100vh;
   width: 100vw;
   background: hsl(0, 0%, 0%);
-  color: hsl(0, 0%, 100%);
+  font-family: sans-serif;
   touch-action: none;
+}
+
+main {
+  display: flex;
+  flex-grow: 1;
+  color: hsl(0, 0%, 100%);
+}
+
+footer {
+  font-size: 60%;
+  text-align: right;
+  flex-shrink: 0;
+  margin: 1ex;
+}
+
+a {
+  color: hsl(35, 80%, 30%);
+  text-decoration: none;
 }
 
 /* Horizontal layout */
@@ -15,7 +33,7 @@ body {
     font-size: clamp(1rem, 3vw, 2rem);
   }
 
-  body {
+  main {
     flex-direction: row;
   }
 }
@@ -26,7 +44,7 @@ body {
     font-size: clamp(1rem, 3vh, 2rem);
   }
 
-  body {
+  main {
     flex-direction: column;
   }
 }
@@ -151,17 +169,17 @@ button:active {
   border-radius: 0ex 2ex 2ex 0ex;
 }
 
-.frac {
+.stack {
   display: inline-block;
   text-align: center;
   vertical-align: middle;
 }
 
-.top {
+.stack>.top {
   display: block;
+  border-bottom: 2px solid white;
 }
 
-.bot {
+.stack>.bot {
   display: block;
-  border-top: 2px solid white;
 }

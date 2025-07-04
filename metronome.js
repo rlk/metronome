@@ -189,7 +189,9 @@ class Metronome {
   }
 
   setBpm(bpm) {
-    bpm = Math.max(1, bpm);
+    bpm = Math.max(bpm, 1);
+    bpm = Math.min(bpm, 999);
+
     if (this.bpm != bpm) {
       this.bpm = bpm;
       if (this.interval) {

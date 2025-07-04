@@ -178,7 +178,7 @@ class Metronome {
     }
   }
 
-  clearDigits() {
+  readyDigits() {
     this.digitElement[2].classList.replace('unselected', 'selected');
     this.digitElement[1].classList.replace('unselected', 'selected');
     this.digitElement[0].classList.replace('unselected', 'selected');
@@ -206,6 +206,8 @@ class Metronome {
     this.digitElement[2].textContent = value.charAt(value.length - 3);
     this.digitElement[1].textContent = value.charAt(value.length - 2);
     this.digitElement[0].textContent = value.charAt(value.length - 1);
+
+    this.read = false;
   }
 
   clickEnter() {
@@ -218,12 +220,11 @@ class Metronome {
     digit0 = isNaN(digit0) ? 0 : digit0;
 
     this.setBpm(digit2 * 100 + digit1 * 10 + digit0);
-    this.read = false;
   }
 
   clickNum(element) {
     if (this.read == false) {
-      this.clearDigits();
+      this.readyDigits();
       this.read = true;
     }
     if (this.read) {

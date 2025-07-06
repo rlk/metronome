@@ -99,12 +99,12 @@ button:active {
   color: hsl(35, 80%, 60%);
 }
 
-.bar.selected {
-  display: flex;
+.bar {
+  display: none;
 }
 
-.bar.unselected {
-  display: none;
+.bar.selected {
+  display: flex;
 }
 
 .num {

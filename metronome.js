@@ -79,7 +79,6 @@ class Metronome {
 
     bar.classList.add('bar');
     bar.classList.add('row');
-    bar.classList.add('unselected');
 
     bar.setAttribute('signature', signature);
     bar.setAttribute('divisions', divisions);
@@ -151,9 +150,9 @@ class Metronome {
 
     document.querySelectorAll('.bar').forEach((bar) => {
       if (bar.getAttribute('signature') === signature) {
-        bar.classList.replace('unselected', 'selected');
+        bar.classList.add('selected');
       } else {
-        bar.classList.replace('selected', 'unselected');
+        bar.classList.remove('selected');
       }
     });
   }

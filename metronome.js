@@ -87,7 +87,6 @@ class Metronome {
       for (var j = 0; j < divisions; j++) {
         var tick = document.createElement('button');
         tick.classList.add('tick');
-        tick.classList.add('idle');
 
         if (j == divisions - 1) {
           tick.classList.add('right');
@@ -142,9 +141,9 @@ class Metronome {
   setSignature(signature) {
     document.querySelectorAll('.bar > .tick').forEach((tick) => {
       if (tick.parentElement.firstElementChild === tick) {
-        tick.classList.replace('idle', 'current');
+        tick.classList.add('current');
       } else {
-        tick.classList.replace('current', 'idle');
+        tick.classList.remove('current');
       }
     });
 
@@ -173,10 +172,8 @@ class Metronome {
     var lastElement = document.querySelector('.bar.selected > .tick.current');
     var nextElement = lastElement.nextElementSibling ?? lastElement.parentNode.firstElementChild;
 
-    lastElement.classList.toggle('current');
-    nextElement.classList.toggle('current');
-    lastElement.classList.toggle('idle');
-    nextElement.classList.toggle('idle');
+    lastElement.classList.remove('current');
+    nextElement.classList.add('current');
   }
 
   playTick() {

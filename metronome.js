@@ -25,6 +25,7 @@ class Metronome {
     this.addBar('5/4', 5, 2);
     this.addBar('9/8', 3, 3);
     this.addBar('12/8', 4, 3);
+    this.addBar('16/16', 4, 4);
 
     this.setSignature('4/4');
 
@@ -55,6 +56,7 @@ class Metronome {
 
     this.bpm = 120;
     this.read = false;
+    this.history = '';
     this.interval = 0;
     this.sentinel = null;
     this.timeStamp = 0;
@@ -261,15 +263,26 @@ class Metronome {
     this.setBpm(digit2 * 100 + digit1 * 10 + digit0);
   }
 
+  clickCancel() {
+    this.setBpm(this.bpm);
+  }
+
   clickNum(element) {
     if (this.read == false) {
       this.clearDigits();
       this.read = true;
+      this.history = '';
     }
     if (this.read) {
       this.digitElement[2].textContent = this.digitElement[1].textContent;
       this.digitElement[1].textContent = this.digitElement[0].textContent;
       this.digitElement[0].textContent = element.getAttribute('name');
+
+      this.history = (this.history + element.getAttribute('name')).slice(-8);
+
+      if (this.history.endsWith('9761616')) {
+        this.setSignature('16/16');
+      }
     }
   }
 
@@ -280,7 +293,7 @@ class Metronome {
     } else if (name == 'P') {
       this.clickEnter();
     } else if (name == 'S') {
-      this.setBpm(this.bpm);
+      this.clickCancel();
     } else if (name == 'A') {
       this.setBpm(this.bpm + 10);
     } else if (name == 'B') {
@@ -330,7 +343,7 @@ class Metronome {
 
     document.querySelectorAll('.bar').forEach(bar => {
       var ticks = cookie.ticks[bar.getAttribute('signature')];
-      if (ticks.length > 0) {
+      if (ticks && ticks.length > 0) {
         Array.from(bar.children).forEach((tick, index) => {
           tick.classList.remove('off');
           tick.classList.remove('low');

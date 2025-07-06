@@ -69,6 +69,64 @@ class Metronome {
     this.loadState();
   }
 
+  clearDigits() {
+    this.digitElement[2].classList.add('selected');
+    this.digitElement[2].classList.remove('unselected');
+    this.digitElement[1].classList.add('selected');
+    this.digitElement[1].classList.remove('unselected');
+    this.digitElement[0].classList.add('selected');
+    this.digitElement[0].classList.remove('unselected');
+
+    this.digitElement[2].textContent = "";
+    this.digitElement[1].textContent = "";
+    this.digitElement[0].textContent = "";
+  }
+
+  setBpm(bpm) {
+    bpm = Math.max(bpm, 1);
+    bpm = Math.min(bpm, 999);
+
+    if (this.bpm != bpm) {
+      this.bpm = bpm;
+      if (this.interval) {
+        this.updateInterval();
+      }
+    }
+
+    this.digitElement[2].classList.remove('selected');
+    this.digitElement[2].classList.add('unselected');
+    this.digitElement[1].classList.remove('selected');
+    this.digitElement[1].classList.add('unselected');
+    this.digitElement[0].classList.remove('selected');
+    this.digitElement[0].classList.add('unselected');
+
+    var value = this.bpm.toString();
+
+    this.digitElement[2].textContent = value.charAt(value.length - 3);
+    this.digitElement[1].textContent = value.charAt(value.length - 2);
+    this.digitElement[0].textContent = value.charAt(value.length - 1);
+
+    this.read = false;
+  }
+
+  setSignature(signature) {
+    document.querySelectorAll('.bar > .tick').forEach((tick) => {
+      if (tick.parentElement.firstElementChild === tick) {
+        tick.classList.replace('idle', 'current');
+      } else {
+        tick.classList.replace('current', 'idle');
+      }
+    });
+
+    document.querySelectorAll('.bar').forEach((bar) => {
+      if (bar.getAttribute('signature') === signature) {
+        bar.classList.replace('unselected', 'selected');
+      } else {
+        bar.classList.replace('selected', 'unselected');
+      }
+    });
+  }
+
   updateInterval() {
     var divisions = document.querySelector('.bar.selected').getAttribute('divisions');
     var timeout = 60000 / this.bpm / divisions;
@@ -121,21 +179,7 @@ class Metronome {
   }
 
   clickSig(element) {
-    document.querySelectorAll('.bar > .tick').forEach((tick) => {
-      if (tick.parentElement.firstElementChild === tick) {
-        tick.classList.replace('idle', 'current');
-      } else {
-        tick.classList.replace('current', 'idle');
-      }
-    });
-
-    document.querySelectorAll('.bar').forEach((bar) => {
-      if (bar.getAttribute('name') === element.getAttribute('name')) {
-        bar.classList.replace('unselected', 'selected');
-      } else {
-        bar.classList.replace('selected', 'unselected');
-      }
-    });
+    this.setSignature(element.getAttribute('signature'));
     if (this.interval) {
       this.updateInterval();
       this.playTick();
@@ -178,40 +222,6 @@ class Metronome {
     }
   }
 
-  readyDigits() {
-    this.digitElement[2].classList.replace('unselected', 'selected');
-    this.digitElement[1].classList.replace('unselected', 'selected');
-    this.digitElement[0].classList.replace('unselected', 'selected');
-
-    this.digitElement[2].textContent = "";
-    this.digitElement[1].textContent = "";
-    this.digitElement[0].textContent = "";
-  }
-
-  setBpm(bpm) {
-    bpm = Math.max(bpm, 1);
-    bpm = Math.min(bpm, 999);
-
-    if (this.bpm != bpm) {
-      this.bpm = bpm;
-      if (this.interval) {
-        this.updateInterval();
-      }
-    }
-
-    this.digitElement[2].classList.replace('selected', 'unselected');
-    this.digitElement[1].classList.replace('selected', 'unselected');
-    this.digitElement[0].classList.replace('selected', 'unselected');
-
-    var value = this.bpm.toString();
-
-    this.digitElement[2].textContent = value.charAt(value.length - 3);
-    this.digitElement[1].textContent = value.charAt(value.length - 2);
-    this.digitElement[0].textContent = value.charAt(value.length - 1);
-
-    this.read = false;
-  }
-
   clickEnter() {
     var digit2 = parseInt(this.digitElement[2].textContent);
     var digit1 = parseInt(this.digitElement[1].textContent);
@@ -226,7 +236,7 @@ class Metronome {
 
   clickNum(element) {
     if (this.read == false) {
-      this.readyDigits();
+      this.clearDigits();
       this.read = true;
     }
     if (this.read) {
@@ -273,81 +283,68 @@ class Metronome {
   }
 
   loadState() {
-    this.stateFromString(document.cookie.match(/METRO=[a-z0-9_]*/)?.pop() ?? '');
+    this.stateFromString(document.cookie.match(/rlk_metronome=([^;]*)/)?.pop() ?? '');
   }
 
   storeState() {
-    document.cookie = `METRO=${this.stringFromState()}`
+    document.cookie = `rlk_metronome=${this.stringFromState()}`
   }
 
   stateFromString(string) {
-    function apply(element, fun) {
-      const key = element.getAttribute('id');
-      if (key) {
-        const match = string.match(new RegExp(`${key}(\\d+)`));
-        if (match?.length > 0) {
-          fun(match.pop());
-        }
-      }
+    var cookie = JSON.parse(string);
+
+    if (!isNaN(parseInt(cookie.bpm))) {
+      this.setBpm(parseInt(cookie.bpm))
     }
 
-    document.querySelectorAll('.digit').forEach((element) => {
-      apply(element, value => element.textContent = value);
+    if (cookie.bar.length > 0) {
+      this.setSignature(cookie.bar);
+    }
+
+    document.querySelectorAll('.bar').forEach(bar => {
+      var ticks = cookie.ticks[bar.getAttribute('signature')];
+      if (ticks.length > 0) {
+        Array.from(bar.children).forEach((tick, index) => {
+          tick.classList.remove('off');
+          tick.classList.remove('low');
+          tick.classList.remove('high');
+
+          if (ticks[index] == '2') {
+            tick.classList.add('high');
+          } else if (ticks[index] == '1') {
+            tick.classList.add('low');
+          } else {
+            tick.classList.add('off');
+          }
+        });
+      }
     });
-    document.querySelectorAll('.tick').forEach((element) => {
-      apply(element, value => {
-        if (value == 0) {
-          element.classList.add('off');
-          element.classList.remove('low');
-          element.classList.remove('high');
-        } else if (value == 1) {
-          element.classList.remove('off');
-          element.classList.add('low');
-          element.classList.remove('high');
-        } else if (value == 2) {
-          element.classList.remove('off');
-          element.classList.remove('low');
-          element.classList.add('high');
-        }
-      });
-    });
-    document.querySelectorAll('.bar').forEach((element) => {
-      apply(element, value => {
-        if (value == 0) {
-          element.classList.add('unselected');
-          element.classList.remove('selected');
-        } else {
-          element.classList.remove('unselected');
-          element.classList.add('selected');
-        }
-      });
-    });
-    this.clickEnter();
   }
 
   stringFromState() {
-    function digitValue(element) {
-      return element.textContent || '0';
-    }
-    function tickValue(element) {
-      return element.classList.contains('high') ? '2' :
-        (element.classList.contains('low') ? '1' : '0');
-    }
-    function barValue(element) {
-      return element.classList.contains('selected') ? '1' : '0';
-    }
+    var bpm =
+      (this.digitElement[2].textContent || '0') +
+      (this.digitElement[1].textContent || '0') +
+      (this.digitElement[0].textContent || '0');
 
-    var string = '';
-    document.querySelectorAll('.digit').forEach((element) => {
-      string += `${element.getAttribute('id')}${digitValue(element)}`
+    var bar = document.querySelector('.bar.selected').getAttribute('signature');
+
+    var ticks = {};
+    document.querySelectorAll('.bar').forEach((parent) => {
+      var value = '';
+      Array.from(parent.children).forEach((child) => {
+        if (child.classList.contains('high')) {
+          value += '2';
+        } else if (child.classList.contains('low')) {
+          value += '1';
+        } else {
+          value += '0';
+        }
+      });
+      ticks[parent.getAttribute('signature')] = value;
     });
-    document.querySelectorAll('.tick').forEach((element) => {
-      string += `${element.getAttribute('id')}${tickValue(element)}`
-    });
-    document.querySelectorAll('.bar').forEach((element) => {
-      string += `${element.getAttribute('id')}${barValue(element)}`
-    });
-    return string;
+
+    return JSON.stringify({ bpm: bpm, bar: bar, ticks: ticks });
   }
 }
 

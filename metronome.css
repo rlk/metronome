@@ -92,14 +92,11 @@ button:active {
   align-items: center;
   font-size: 500%;
   font-variant-numeric: tabular-nums;
+  color: hsl(0, 0%, 100%);
 }
 
 .digit.selected {
   color: hsl(35, 80%, 60%);
-}
-
-.digit.unselected {
-  color: hsl(0, 0%, 100%);
 }
 
 .bar.selected {

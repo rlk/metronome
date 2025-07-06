@@ -29,9 +29,9 @@ class Metronome {
     this.setSignature('4/4');
 
     this.digitElement = [];
-    this.digitElement[2] = document.querySelector('.digit2');
-    this.digitElement[1] = document.querySelector('.digit1');
-    this.digitElement[0] = document.querySelector('.digit0');
+    this.digitElement[2] = document.getElementById('digit2');
+    this.digitElement[1] = document.getElementById('digit1');
+    this.digitElement[0] = document.getElementById('digit0');
 
     document.querySelectorAll('.tick').forEach((element) => {
       element.addEventListener('click', () => this.clickTick(element));
@@ -108,11 +108,8 @@ class Metronome {
 
   clearDigits() {
     this.digitElement[2].classList.add('selected');
-    this.digitElement[2].classList.remove('unselected');
     this.digitElement[1].classList.add('selected');
-    this.digitElement[1].classList.remove('unselected');
     this.digitElement[0].classList.add('selected');
-    this.digitElement[0].classList.remove('unselected');
 
     this.digitElement[2].textContent = "";
     this.digitElement[1].textContent = "";
@@ -131,11 +128,8 @@ class Metronome {
     }
 
     this.digitElement[2].classList.remove('selected');
-    this.digitElement[2].classList.add('unselected');
     this.digitElement[1].classList.remove('selected');
-    this.digitElement[1].classList.add('unselected');
     this.digitElement[0].classList.remove('selected');
-    this.digitElement[0].classList.add('unselected');
 
     var value = this.bpm.toString();
 

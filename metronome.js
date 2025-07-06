@@ -54,6 +54,8 @@ class Metronome {
       element.addEventListener('click', (event) => this.clickTap(event));
     })
 
+    document.addEventListener('keydown', (event) => this.keyDown(event));
+
     this.bpm = 120;
     this.read = false;
     this.history = '';
@@ -284,9 +286,9 @@ class Metronome {
     if (this.read) {
       this.digitElement[2].textContent = this.digitElement[1].textContent;
       this.digitElement[1].textContent = this.digitElement[0].textContent;
-      this.digitElement[0].textContent = element.getAttribute('name');
+      this.digitElement[0].textContent = element.getAttribute('id');
 
-      this.history = (this.history + element.getAttribute('name')).slice(-8);
+      this.history = (this.history + element.getAttribute('id')).slice(-8);
 
       if (this.history.endsWith('9761616')) {
         this.setSignature('16/16');
@@ -298,23 +300,43 @@ class Metronome {
   }
 
   clickFun(element) {
-    var name = element.getAttribute('name');
-    if (name == 'play') {
+    var id = element.getAttribute('id');
+    if (id == 'play') {
       this.clickPlay();
-    } else if (name == 'P') {
+    } else if (id == 'P') {
       this.clickEnter();
-    } else if (name == 'S') {
+    } else if (id == 'S') {
       this.clickCancel();
-    } else if (name == 'A') {
+    } else if (id == 'A') {
       this.setBpm(this.bpm + 10);
-    } else if (name == 'B') {
+    } else if (id == 'B') {
       this.setBpm(this.bpm + 1);
-    } else if (name == 'C') {
+    } else if (id == 'C') {
       this.setBpm(this.bpm - 1);
-    } else if (name == 'D') {
+    } else if (id == 'D') {
       this.setBpm(this.bpm - 10);
     }
     this.storeState();
+  }
+
+
+  keyDown(event) {
+    switch (event.key) {
+      case '0': return this.clickNum(document.getElementById('0'));
+      case '1': return this.clickNum(document.getElementById('1'));
+      case '2': return this.clickNum(document.getElementById('2'));
+      case '3': return this.clickNum(document.getElementById('3'));
+      case '4': return this.clickNum(document.getElementById('4'));
+      case '5': return this.clickNum(document.getElementById('5'));
+      case '6': return this.clickNum(document.getElementById('6'));
+      case '7': return this.clickNum(document.getElementById('7'));
+      case '8': return this.clickNum(document.getElementById('8'));
+      case '9': return this.clickNum(document.getElementById('9'));
+      case ' ': return this.clickPlay();
+      case 'Enter': return this.clickEnter();
+      case 'Escape': return this.clickCancel();
+      case 'Control': return this.clickTap(event);
+    }
   }
 
   lockScreen() {

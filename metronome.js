@@ -26,6 +26,8 @@ class Metronome {
     this.addBar('9/8', 3, 3);
     this.addBar('12/8', 4, 3);
 
+    this.setSignature('4/4');
+
     this.digitElement = [];
     this.digitElement[2] = document.querySelector('.digit2');
     this.digitElement[1] = document.querySelector('.digit1');
@@ -93,7 +95,7 @@ class Metronome {
           tick.classList.add('off');
         } else if (j == 0) {
           tick.classList.add('left');
-          tick.classList.add('low');
+          tick.classList.add(i == 0 ? 'high' : 'low');
         } else {
           tick.classList.add('center');
           tick.classList.add('off');

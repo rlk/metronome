@@ -170,6 +170,14 @@ class Metronome {
     }, timeout);
   }
 
+  toggleFullscreen() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.querySelector('body')?.requestFullscreen();
+    }
+  }
+
   stepTick() {
     var lastElement = document.querySelector('.bar.selected > .tick.current');
     var nextElement = lastElement.nextElementSibling ?? lastElement.parentNode.firstElementChild;
@@ -282,6 +290,9 @@ class Metronome {
 
       if (this.history.endsWith('9761616')) {
         this.setSignature('16/16');
+      }
+      if (this.history.endsWith('9761234')) {
+        this.toggleFullscreen();
       }
     }
   }

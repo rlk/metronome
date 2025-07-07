@@ -20,15 +20,6 @@
 
 class Metronome {
   constructor() {
-    this.addBar('3/4', 3, 2);
-    this.addBar('4/4', 4, 2);
-    this.addBar('5/4', 5, 2);
-    this.addBar('9/8', 3, 3);
-    this.addBar('12/8', 4, 3);
-    this.addBar('16/16', 4, 4);
-
-    this.setSignature('4/4');
-
     this.digitElement = [];
     this.digitElement[2] = document.getElementById('digit2');
     this.digitElement[1] = document.getElementById('digit1');
@@ -76,36 +67,6 @@ class Metronome {
       .then(buffer => { this.audioBufferHigh = buffer });
 
     this.loadState();
-  }
-
-  addBar(signature, groups, divisions) {
-    var bar = document.createElement('div');
-
-    bar.classList.add('bar');
-    bar.classList.add('row');
-
-    bar.setAttribute('signature', signature);
-    bar.setAttribute('divisions', divisions);
-
-    for (var i = 0; i < groups; i++) {
-      for (var j = 0; j < divisions; j++) {
-        var tick = document.createElement('button');
-        tick.classList.add('tick');
-
-        if (j == divisions - 1) {
-          tick.classList.add('right');
-          tick.classList.add('off');
-        } else if (j == 0) {
-          tick.classList.add('left');
-          tick.classList.add(i == 0 ? 'high' : 'low');
-        } else {
-          tick.classList.add('center');
-          tick.classList.add('off');
-        }
-        bar.appendChild(tick);
-      }
-    }
-    document.getElementById('bars')?.appendChild(bar);
   }
 
   clearDigits() {
